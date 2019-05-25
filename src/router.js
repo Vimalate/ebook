@@ -6,7 +6,17 @@ export default new Router({
     routes:[ 
         {
             path: '/',
-            component:resolve => require(['@/views/home.vue'], resolve),
-          },
+            redirect:'/ebook'
+        },
+        {
+            path: '/ebook',
+            component:()=>import('./views/ebook/index.vue'),
+            children:[
+                {
+                    path: ':fileName',
+                    component:()=>import('./components/ebook/Reader.vue')
+                },
+            ]
+        },
     ]
 })
