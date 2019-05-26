@@ -7,9 +7,8 @@
 <script>
 import { ebookMixin } from "../../utils/mixin.js";
 import Epub from "epubjs";
-import {getFontFamily, saveFontFamily, getFontSize, saveFontSize, getTheme, saveTheme} from '../../utils/localStorage';
-
-global.ePub = Epub;
+import {getFontFamily, saveFontFamily, getFontSize, saveFontSize, getTheme, saveTheme, getLocation} from '../../utils/localStorage';
+import {addClass} from '../../utils/book'
 export default {
   data() {
     return {
@@ -29,13 +28,17 @@ export default {
   methods: {
     prevPage() {
       if(this.rendition){
-        this.rendition.prev()
+        this.rendition.prev().then(()=>{
+          this.refreshLocation()
+        })
         this.hideTitleAndMenu()
       }
     },
     nextPage() {
       if(this.rendition){
-        this.rendition.next()
+        this.rendition.next().then(()=>{
+          this.refreshLocation()
+        })
         this.hideTitleAndMenu()
         // console.log('next')
       }
@@ -52,8 +55,8 @@ export default {
       this.setsettingShow(-1)
       this.setFontFamilyVisible(false)
     },
+    //获取fontSize
     initFontSize() {
-      //获取fontSize
       let fontSize= getFontSize(this.fileName)
       if(!fontSize){
         saveFontSize(this.fileName,this.defaultFontSize)
@@ -62,8 +65,8 @@ export default {
         this.setdefaultFontSize(fontSize)
       }
     },
+    //获取fontFamil
     initFontFamily() {
-       //获取fontFamily
       let font= getFontFamily(this.fileName)
       if(!font){
         saveFontFamily(this.fileName,this.defaultFontFamily)
@@ -78,33 +81,33 @@ export default {
       let defaultTheme=getTheme(this.fileName)
       if(!defaultTheme){
         defaultTheme=this.themeList[0].name
-        this.setDefaultTheme(defaultTheme)
         saveTheme(this.fileName,defaultTheme)
       }
+      //保存获取到的主题样式
+      this.setDefaultTheme(defaultTheme)
+      //使主题样式生效
       this.themeList.forEach(theme => {
         this.rendition.themes.register(theme.name,theme.style)
       });
       this.rendition.themes.select(defaultTheme)
     },
-
-    initEpub() {
-      const baseUrl =
-        "http://192.168.1.107:8081/epub/" + this.fileName + ".epub";
-      // console.log(baseUrl); 
-      this.book = new Epub(baseUrl);
-     
-      console.log(this.book);
+    
+    initRendition() {
       this.rendition = this.book.renderTo('read',{
         width: innerWidth,
         height: innerHeight, 
       });
-      this.setCurrentBook(this.book)
-      this.rendition.display().then(()=>{
+      const location=getLocation(this.fileName)
+      this.display(location,()=>{
         this.initFontFamily()
         this.initFontSize()
         this.initTheme()
+        this.initGlobalStyle()
       })
-      this.rendition.on('touchstart',event=>{
+      
+    },
+    initGesture() {
+       this.rendition.on('touchstart',event=>{
         this.touchStartX=event.changedTouches[0].clientX
         this.touchStartTime=event.timeStamp
       })
@@ -122,12 +125,30 @@ export default {
         // event.preventDefault();
         event.stopPropagation();
       })
+    },
+    initEpub() {
+      
+      const baseUrl =
+        process.env.VUE_APP_RES_URL+'/epub/' + this.fileName + ".epub";
+      // console.log(baseUrl); 
+      this.book = new Epub(baseUrl);
+      this.setCurrentBook(this.book)
+      this.initRendition()
+      this.initGesture()
+      this.book.ready.then(()=>{
+        return this.book.locations.generate(750*(window.innerWidth/375)*
+        (getFontSize(this.fileName)/16))
+      }).then((locations)=>{
+        // console.log(locations)
+       this.setBookAvailable(true)
+       this.refreshLocation()
+      })
       this.rendition.hooks.content.register(contents=>{
         Promise.all([
-          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/daysOne.css`),
-          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/cabin.css`),
-          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/montserrat.css`),
-          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/tangerine.css`)
+          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`),
+          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/cabin.css`),
+          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/montserrat.css`),
+          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`)
         ]).then(()=>{
           // console.log('加载完毕')
         })

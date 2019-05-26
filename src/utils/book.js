@@ -106,3 +106,29 @@ export function themeList(vue) {
     }
   ]
 }
+
+export function addClass(href) {
+  const link=document.createElement('link')
+  link.setAttribute('rel','stylesheet')
+  link.setAttribute('type','text/css')
+  link.setAttribute('href',href)
+  document.getElementsByTagName('head')[0].appendChild(link)
+
+}
+export function removeCss(href) {
+ const links= document.getElementsByTagName('link')
+ //逆循环
+ for(let i=links.length;i>=0;i--){
+   let link=links[i]
+   if(link&&link.getAttribute('href')&&link.getAttribute('href')===href){
+     link.parentNode.removeChild(link)
+   }
+ }
+}
+
+export function removeAllCss() {
+  removeCss(`${process.env.VUE_APP_RES_URL}/fonts/theme/theme_default.css`)
+  removeCss(`${process.env.VUE_APP_RES_URL}/fonts/theme/theme_eye.css`)
+  removeCss(`${process.env.VUE_APP_RES_URL}/fonts/theme/theme_gold.css`)
+  removeCss(`${process.env.VUE_APP_RES_URL}/fonts/theme/theme_night.css`)
+}
