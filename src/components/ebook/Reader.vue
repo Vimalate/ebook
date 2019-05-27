@@ -8,7 +8,7 @@
 import { ebookMixin } from "../../utils/mixin.js";
 import Epub from "epubjs";
 import {getFontFamily, saveFontFamily, getFontSize, saveFontSize, getTheme, saveTheme, getLocation} from '../../utils/localStorage';
-import {addClass} from '../../utils/book'
+import {flatten} from '../../utils/book'
 export default {
   data() {
     return {
@@ -50,11 +50,7 @@ export default {
       }
       this.setMenuShow(!this.menuShow)
     },
-    hideTitleAndMenu() {
-      this.setMenuShow(false)
-      this.setsettingShow(-1)
-      this.setFontFamilyVisible(false)
-    },
+   
     //获取fontSize
     initFontSize() {
       let fontSize= getFontSize(this.fileName)
@@ -126,6 +122,33 @@ export default {
         event.stopPropagation();
       })
     },
+    parseBook() {
+      this.book.loaded.cover.then((cover)=>{
+        this.book.archive.createUrl(cover).then((url)=>{
+          this.setCover(url)
+        })
+      })
+      this.book.loaded.metadata.then((metadata)=>{
+          this.setMetadata(metadata)
+          // console.log(url)
+        })
+      this.book.loaded.navigation.then((nav)=>{
+        const navItem=flatten(nav.toc)
+        // console.log(flatten(nav.toc))
+        // 层级判断
+        function find(item,level=0) {
+          ///判断item.parent是否存在，存在的话level+1，直到找到parentItem.id===item.parent的停止
+          return  !item.parent?level:find(navItem.filter(parentItem=>
+            parentItem.id===item.parent 
+          )[0],++level)
+        }
+        navItem.forEach(item=>{
+          item.level=find(item)
+        })
+        console.log(navItem)
+        this.setNavigation(navItem)
+      })
+    },
     initEpub() {
       
       const baseUrl =
@@ -135,6 +158,7 @@ export default {
       this.setCurrentBook(this.book)
       this.initRendition()
       this.initGesture()
+      this.parseBook()
       this.book.ready.then(()=>{
         return this.book.locations.generate(750*(window.innerWidth/375)*
         (getFontSize(this.fileName)/16))

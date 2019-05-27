@@ -3,9 +3,13 @@ import {
     mapActions
 } from 'vuex'
 import {
-    themeList,addClass, removeAllCss
+    themeList,
+    addClass,
+    removeAllCss,getReadTimeByMinute
 } from './book.js'
-import {saveLocation} from './localStorage'
+import {
+    saveLocation
+} from './localStorage'
 export const ebookMixin = {
     computed: {
         ...mapGetters([
@@ -54,10 +58,10 @@ export const ebookMixin = {
             'setOffsetY',
             'setIsBookmark',
         ]),
-         //添加全局样式
-         initGlobalStyle() {
-             //先移除所有自添加的css主题样式
-             removeAllCss()
+        //添加全局样式
+        initGlobalStyle() {
+            //先移除所有自添加的css主题样式
+            removeAllCss()
             switch (this.defaultTheme) {
                 case 'Default':
                     addClass(`${process.env.VUE_APP_RES_URL}/fonts/theme/theme_default.css`)
@@ -81,32 +85,41 @@ export const ebookMixin = {
         //刷新进度条
         refreshLocation() {
             let currentLocation = this.currentBook.rendition.currentLocation();
-            if (currentLocation.start && currentLocation.start.index){
-                let startCfi=currentLocation.start.cfi
+            if (currentLocation.start && currentLocation.start.index) {
+                let startCfi = currentLocation.start.cfi
                 let progress = this.currentBook.locations.percentageFromCfi(startCfi);
                 this.setProgress(Math.floor(progress * 100));
-                saveLocation(this.fileName,startCfi)
+                saveLocation(this.fileName, startCfi)
                 this.setSection(currentLocation.start.index)
             }
-            
+
         },
-        display(target,callback){
-            if(target){
-                this.currentBook.rendition.display(target).then(()=>{
-                  this.refreshLocation()
-                  if(callback){
-                    callback()
-                  }
-              })
-            }else{
-              this.currentBook.rendition.display().then(()=>{
-                this.refreshLocation()
-                if(callback){
-                    callback()
-                  }
-            })
-            }
+        hideTitleAndMenu() {
+            this.setMenuShow(false)
+            this.setsettingShow(-1)
+            this.setFontFamilyVisible(false)
           },
+        display(target, callback) {
+            if (target) {
+                this.currentBook.rendition.display(target).then(() => {
+                    this.refreshLocation()
+                    if (callback) {
+                        callback()
+                    }
+                })
+            } else {
+                this.currentBook.rendition.display().then(() => {
+                    this.refreshLocation()
+                    if (callback) {
+                        callback()
+                    }
+                })
+            }
+        },
+        //获取已读时间
+        getReadTimeText() {
+            return this.$t('book.haveRead').replace('$1',getReadTimeByMinute(this.fileName))
+        },
     },
-    
+
 }

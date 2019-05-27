@@ -27,3 +27,9 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+##树状结构变一维数组
+flatten(arr) {
+  return [].concat(...arr.map(item=>[].concat(item,...flatten(item.subitems))))
+}
+##ellipsis 指定宽度

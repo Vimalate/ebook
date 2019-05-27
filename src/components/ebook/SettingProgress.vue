@@ -39,33 +39,24 @@
 
 <script>
 import { ebookMixin } from "../../utils/mixin.js";
-import { saveLocation, getReadTime } from '../../utils/localStorage';
+// import { getReadTime } from '../../utils/localStorage';
 export default {
   data() {
     return {};
   },
   computed: {
     getSectionName() {
-      if (this.section) {
-        let currentSectionInfo = this.currentBook.section(this.section);
-        if (currentSectionInfo && currentSectionInfo.href) {
-          return this.currentBook.navigation.get(currentSectionInfo.href).label;
-        }
-      }
+      // if (this.section) {
+      //   let currentSectionInfo = this.currentBook.section(this.section);
+      //   if (currentSectionInfo && currentSectionInfo.href&&this.currentBook.navigation) {
+      //     return this.currentBook.navigation.get(currentSectionInfo.href).label;
+      //   }
+      // }//不能获取二级目录
+
+      return this.section?this.navigation[this.section].label:''
     }
   },
   methods: {
-    getReadTimeText() {
-        return this.$t('book.haveRead').replace('$1',this.getReadTimeByMinute(this.fileName))
-    },
-    getReadTimeByMinute() {
-        let readTime=getReadTime(this.fileName)
-        if(!readTime){
-            return 0
-        }else{
-            return Math.ceil(readTime/60)
-        }
-    },
     onProgressChange(progress) {
       this.setProgress(progress).then(() => {
         this.displayProgress();
@@ -157,6 +148,7 @@ export default {
         -webkit-appearance: none;
         height: px2rem(2);
         margin: 0 px2rem(10);
+        background: -webkit-linear-gradient(#5d6268, #5d6268) no-repeat, #b4b5b7!important;
         &:focus {
           outline: none;
         }
