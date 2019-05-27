@@ -4,7 +4,7 @@
       <div class="slide-wrapper" v-show="menuShow&&settingShow===3">
         <transition name="slide-right">
         <div class="content" v-if="settingShow===3">
-          <div class="content-wrapper">
+          <div class="content-wrapper" v-if="bookAvailable">
             <div class="page">
               <!-- 按需加载组件 -->
               <component :is="currentTab===1?content:bookmark"></component>
@@ -18,6 +18,9 @@
               >{{$t('book.bookmark')}}</div>
             </div>
           </div>
+          <div class="content-empty" v-else>
+            <loading></loading>
+          </div>
         </div>
         </transition>
         <div class="content-bg" @click="hideTitleAndMenu"></div>
@@ -29,6 +32,7 @@
 <script>
 import { ebookMixin } from "../../utils/mixin.js";
 import SlideContents from './SlideContents'
+import Loading from './Loading'
 export default {
   data() {
     return {
@@ -37,7 +41,9 @@ export default {
       bookmark:null
     };
   },
- 
+ components:{
+   Loading
+ },
   methods: {
     selectTab(tab) {
       this.currentTab=tab

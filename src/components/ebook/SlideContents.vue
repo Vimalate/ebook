@@ -2,7 +2,7 @@
   <div class="search-container">
     <div class="slide-contents-search-wrapper">
       <div class="search-input-wrapper">
-        <div class="search-icon">
+        <div class="search-icon" @click="search">
           <span class="icon-search"></span>
         </div>
         <input
@@ -10,6 +10,8 @@
           class="search-input"
           :placeholder="$t('book.searchHint')"
           @click="hideSearchVisible"
+          v-model.trim="searchText"
+          @keyup.enter.exact="search"
         >
       </div>
       <div
@@ -18,7 +20,7 @@
         @click="hideSearchVisible"
       >{{$t('book.cancel')}}</div>
     </div>
-    <div class="slide-contents-book-wrapper">
+    <div class="slide-contents-book-wrapper" v-show="!searchVisible">
       <div class="book-img-wrapper">
         <img :src="cover" class="book-img" alt>
       </div>
@@ -34,7 +36,7 @@
         <div class="book-time">{{getReadTimeText()}}</div>
       </div>
     </div>
-    <scroll class="slide-contents-list" :top="156" :bottom="48" ref="scroll">
+    <scroll class="slide-contents-list" v-show="!searchVisible" :top="156" :bottom="48" ref="scroll">
       <div class="slide-contents-item" v-for="(item, index) in navigation" :key="index"
       @click="displayNavigation(item.href)">
         <span class="slide-contents-item-label"
@@ -44,6 +46,13 @@
         <span class="slide-contents-page"></span>
       </div>
     </scroll>
+    <scroll class="slide-search-list" 
+    :top='66' :bottom='48'  v-show="searchVisible" >
+      <div class="slide-search-item" v-for="(item, index) of searchList"
+       :key="index" v-html="item.excerpt" @click="displayNavigation(item.cfi,true)">
+        
+      </div>
+    </scroll> 
   </div>
 </template>
 
@@ -54,24 +63,64 @@ import {px2rem} from '../../utils/utils'
 export default {
   data() {
     return {
-      searchVisible: false
+      searchVisible: false,
+      searchText:'',
+      searchList:null
     };
   },
   methods: {
-    displayNavigation(item) {
-      this.display(item,()=>{
+    //整本书搜索
+    doSearch(q) {
+        return Promise.all(
+          this.currentBook.spine.spineItems.map(
+            item => item.load(this.currentBook.load.bind(this.currentBook)).then(item.find.bind(item, q)).finally(item.unload.bind(item)))
+        ).then(results => 
+         //二维数组和空数组连接进行降纬操作
+        Promise.resolve([].concat.apply([], results)))
+      }, 
+    search() {
+      let searchText=this.searchText
+      if(searchText&&searchText.length>0){
+        this.doSearch(searchText).then((result)=>{
+        this.searchList=result
+        this.searchText=''
+        this.searchList.map(item=>{
+        item.excerpt=item.excerpt.replace(searchText,` <span class="content-search-text">
+        ${searchText}</span>`)
+        return item
+        })
+      })
+      }
+    },
+    search1() { 
+        this.doSearch(this.searchText).then(result => {
+          this.searchList = result.map(item => {
+            item.excerpt = item.excerpt.replace(this.searchText, `<span class="content-search-text">${this.searchText}</span>`)
+            return item
+          })
+          this.$refs.searchInput.blur()
+        })
+      },
+    displayNavigation(target,highlight=false) {//heighlight默认false
+      this.display(target,()=>{
         this.hideTitleAndMenu()
+        if(highlight){
+          this.currentBook.rendition.annotations.highlight(target)
+        }
       })
     },
     hideSearchVisible() {
-      return (this.searchVisible = !this.searchVisible);
+      this.searchVisible = !this.searchVisible
+      this.searchText=''
+      this.searchList=null
     },
     contentItem(item) {
       return {
          marginLeft:`${px2rem(item.level*15)}rem`
       }
-    }
+    },
   },
+
   mixins: [ebookMixin],
   components: {
     Scroll
@@ -186,6 +235,18 @@ export default {
        
       }
       .slide-contents-page{}
+    }
+  }
+  .slide-search-list{
+    width: 100%;
+    padding: 0 px2rem(15);
+    box-sizing: border-box;
+    .slide-search-item{
+      font-size: px2rem(14);
+      line-height: px2rem(16);
+      padding: px2rem(20) 0;
+      box-sizing: border-box;
+
     }
   }
 }
