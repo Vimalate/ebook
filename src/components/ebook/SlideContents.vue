@@ -31,7 +31,7 @@
       <div class="book-progress-wrapper">
         <div class="book-progress">
           <span class="progress">{{progress+'%'}}</span>
-          <span class="progress-text">{{$t('book.haveRead2')}}</span>
+          <span class="progress-text">&nbsp;{{$t('book.haveRead2')}}</span>
         </div>
         <div class="book-time">{{getReadTimeText()}}</div>
       </div>

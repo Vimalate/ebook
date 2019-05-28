@@ -9,11 +9,11 @@
               <!-- 按需加载组件 -->
               <component :is="currentTab===1?content:bookmark"></component>
             </div>
-            <div class="page-tab">
-              <div class="tab-item" :class="{'selected':currentTab===1}"
+            <div class="content-page-tab">
+              <div class="content-tab-item" :class="{'selected':currentTab===1}"
               @click="selectTab(1)"
               >{{$t('book.navigation')}}</div>
-              <div class="tab-item" :class="{'selected':currentTab===2}"
+              <div class="content-tab-item" :class="{'selected':currentTab===2}"
               @click="selectTab(2)"
               >{{$t('book.bookmark')}}</div>
             </div>
@@ -32,13 +32,14 @@
 <script>
 import { ebookMixin } from "../../utils/mixin.js";
 import SlideContents from './SlideContents'
+import SlideBookmark from './SlideBookmark'
 import Loading from './Loading'
 export default {
   data() {
     return {
       currentTab:1,
       content:SlideContents,
-      bookmark:null
+      bookmark:SlideBookmark
     };
   },
  components:{
@@ -76,12 +77,12 @@ export default {
         width: 100%;
         overflow: hidden;
       }
-      .page-tab {
+      .content-page-tab {
         display: flex;
         flex: 0 0 px2rem(48);
         width: 100%;
         height: px2rem(48);
-        .tab-item{
+        .content-tab-item{
           flex: 1;
           @include center;
           font-size: px2rem(14)

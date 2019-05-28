@@ -8,7 +8,7 @@ import {
     removeAllCss,getReadTimeByMinute
 } from './book.js'
 import {
-    saveLocation
+    saveLocation, getBookmark
 } from './localStorage'
 export const ebookMixin = {
     computed: {
@@ -89,8 +89,20 @@ export const ebookMixin = {
                 let startCfi = currentLocation.start.cfi
                 let progress = this.currentBook.locations.percentageFromCfi(startCfi);
                 this.setProgress(Math.floor(progress * 100));
-                saveLocation(this.fileName, startCfi)
                 this.setSection(currentLocation.start.index)
+                saveLocation(this.fileName, startCfi)
+                //每次翻页判断是否为书签页
+                const bookmark=getBookmark(this.fileName)
+                console.log(bookmark)
+                if(bookmark){
+                    if(bookmark.some(item=>item.cfi===startCfi)){
+                        this.setIsBookmark(true)
+                    }else{
+                        this.setIsBookmark(false)
+                    }
+                }else{
+                    this.setIsBookmark(false)
+                }
             }
 
         },

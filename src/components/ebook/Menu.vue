@@ -30,34 +30,30 @@
  
 <script>
 import { ebookMixin } from "../../utils/mixin.js";
-import EbookSettingFont from './SettingFont';
-import EbookPopup from './settingFontPopup';
-import EbookSettingTheme from './SettingThem'
-import EbookSettingProgress from './SettingProgress'
-import EbookSlide from './Slide'
+import EbookSettingFont from "./SettingFont";
+import EbookPopup from "./settingFontPopup";
+import EbookSettingTheme from "./SettingThem";
+import EbookSettingProgress from "./SettingProgress";
+import EbookSlide from "./Slide";
 export default {
   data() {
     return {};
   },
-  components:{
+  components: {
     EbookSettingFont,
     EbookPopup,
     EbookSettingTheme,
     EbookSettingProgress,
     EbookSlide
   },
-  mixins:[ebookMixin],
+  mixins: [ebookMixin],
   methods: {
-      showSetting(key) {
-        this.setsettingShow(key)
-      },
-      ifSettingShow() {
-        
-      },
-      ifTitleAndMenuShow() {
-
-      }
-  },
+    showSetting(key) {
+      this.setsettingShow(key);
+    },
+    ifSettingShow() {},
+    ifTitleAndMenuShow() {}
+  }
 };
 </script>
 <style lang='scss' scoped>
@@ -66,7 +62,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  z-index: 102;
+  z-index: 200;
   display: flex;
   width: 100%;
   height: px2rem(48);
