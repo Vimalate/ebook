@@ -26,7 +26,7 @@ export default {
   },
   methods: {
       refresh() {
-          console.log(this.width)
+        //   console.log(this.width)
           if(this.height&&this.width){
               this.$refs.bookmark.style.borderWidth = `${px2rem(this.height - 6)}rem ${px2rem(this.width / 2)}rem ${px2rem(6)}rem ${px2rem(this.width / 2)}rem`
           }

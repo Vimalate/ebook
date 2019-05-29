@@ -29,7 +29,7 @@
           </div>
           <div class="text-wrapper">
             <span class="text-title">{{getSectionName}}</span>
-            <span>&nbsp;&nbsp;({{bookAvailable ? progress + '%' : '加载中...'}})</span>
+            <span>&nbsp;&nbsp;({{bookAvailable ? progress + '%' :  $t('book.loading')}})</span>
           </div>
         </div>
       </div>
@@ -39,22 +39,22 @@
 
 <script>
 import { ebookMixin } from "../../utils/mixin.js";
-// import { getReadTime } from '../../utils/localStorage';
+import { saveProgress } from '../../utils/localStorage';
 export default {
   data() {
     return {};
   },
   computed: {
-    getSectionName() {
-      // if (this.section) {
-      //   let currentSectionInfo = this.currentBook.section(this.section);
-      //   if (currentSectionInfo && currentSectionInfo.href&&this.currentBook.navigation) {
-      //     return this.currentBook.navigation.get(currentSectionInfo.href).label;
-      //   }
-      // }//不能获取二级目录
+    // getSectionName() {
+    //   // if (this.section) {
+    //   //   let currentSectionInfo = this.currentBook.section(this.section);
+    //   //   if (currentSectionInfo && currentSectionInfo.href&&this.currentBook.navigation) {
+    //   //     return this.currentBook.navigation.get(currentSectionInfo.href).label;
+    //   //   }
+    //   // }//不能获取二级目录
 
-      return this.section?this.navigation[this.section].label:''
-    }
+    //   return this.section?this.navigation[this.section].label:''
+    // }
   },
   methods: {
     onProgressChange(progress) {
@@ -62,6 +62,7 @@ export default {
         this.displayProgress();
         this.updateProgress();
       });
+      saveProgress(this.fileName, progress)
     },
 
     onProgressInput(progress) {
@@ -69,12 +70,6 @@ export default {
         this.displayProgress();
         this.updateProgress();
       });
-    },
-    displayProgress() {
-      let cfi = this.currentBook.locations.cfiFromPercentage(
-        this.progress / 100
-      );
-      this.display(cfi)
     },
     updateProgress() {
       this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`;
@@ -85,6 +80,7 @@ export default {
           this.displaySection();
         });
       }
+      
     },
     nextSection() {
       //小于总章节并且分页渲染完成
@@ -116,7 +112,7 @@ export default {
   position: absolute;
   bottom: px2rem(48);
   left: 0;
-  z-index: 101;
+  z-index: 160;
   width: 100%;
   height: px2rem(90);
   background: white;

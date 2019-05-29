@@ -52,7 +52,7 @@ export default {
     },
     //点击翻页功能
     onMaskClick(e) {
-      console.log(e)
+      // console.log(e)
       let offsetX=e.offsetX
       let width=window.innerWidth
       if(offsetX>0&&offsetX<width*0.3){
@@ -97,7 +97,7 @@ export default {
         this.currentBook.rendition.themes.fontSize(fontSize + "px");
         this.setdefaultFontSize(fontSize);
       }
-    },
+    }, 
     //获取fontFamil
     initFontFamily() {
       let font = getFontFamily(this.fileName);
@@ -187,7 +187,7 @@ export default {
         navItem.forEach(item => {
           item.level = find(item);
         });
-        console.log(navItem);
+        // console.log(navItem);
         this.setNavigation(navItem);
       });
     },
@@ -207,7 +207,34 @@ export default {
           );
         })
         .then(locations => {
-          // console.log(locations)
+         this.navigation.forEach(nav => {
+            nav.pagelist = []
+          })
+           locations.forEach(item => {
+            const loc = item.match(/\[(.*)\]!/)[1]
+            this.navigation.forEach(nav => {
+              if (nav.href) {
+                const href ='A'+ nav.href.match(/^html\/(.*)\.xhtml$/)[1]
+                // console.log(href)
+                if (href) {
+                  if (href=== loc) {
+                    nav.pagelist.push(item)
+                    // console.log(nav.pagelist)
+                  }
+                }
+              }
+            })
+            let currentPage = 1
+            this.navigation.forEach((nav, index) => {
+              if (index === 0) {
+                nav.page = 1
+              } else {
+                nav.page = currentPage
+              }
+              currentPage += nav.pagelist.length + 1
+            })
+          })
+          console.log(locations,this.navigation)
           this.setBookAvailable(true);
           this.refreshLocation();
         });

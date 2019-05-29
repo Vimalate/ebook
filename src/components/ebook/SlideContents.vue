@@ -25,8 +25,8 @@
         <img :src="cover" class="book-img" alt>
       </div>
       <div class="book-info-title">
-        <div class="book-title">{{metadata.title}}</div>
-        <div class="book-author">{{metadata.creator}}</div>
+        <div class="book-title"><span class="book-title-text">{{metadata.title}}</span></div>
+        <div class="book-author"><span class="book-author-text">{{metadata.creator}}</span></div>
       </div>
       <div class="book-progress-wrapper">
         <div class="book-progress">
@@ -157,15 +157,23 @@ export default {
       padding: 0 px2rem(10);
       box-sizing: border-box;
       flex: 1;
-      width: px2rem(150);
+      // width: px2rem(150);
       .book-title {
         font-size: px2rem(14);
         line-height: px2rem(16);
-        @include ellipsis2(2);
+        @include left;
+        .book-title-text{
+         @include ellipsis2(2);
+      }
       }
       .book-author {
         font-size: px2rem(12);
         margin-top: px2rem(6);
+        line-height: px2rem(14);
+         @include left;
+        .book-author-text{
+           @include ellipsis
+        }
       }
     }
     .book-progress-wrapper {
@@ -205,6 +213,7 @@ export default {
         width: 100%;
         font-size: px2rem(12);
         height: px2rem(28);
+        color: #4c5059;
         // padding: 0 px2rem();
         background: transparent;
 

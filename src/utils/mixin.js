@@ -34,6 +34,22 @@ export const ebookMixin = {
         themeList() {
             return themeList(this)
         },
+        getSectionName() {
+            // if (this.section) {
+            //   let currentSectionInfo = this.currentBook.section(this.section);
+            //   if (currentSectionInfo && currentSectionInfo.href&&this.currentBook.navigation) {
+            //     return this.currentBook.navigation.get(currentSectionInfo.href).label;
+            //   }
+            // }//不能获取二级目录
+            if (this.section) {
+                const section = this.currentBook.section(this.section)
+                if (section && section.href && this.currentBook && this.currentBook.navigation) {
+                  // return this.currentBook.navigation.get(section.href).label
+                  return this.navigation[this.section].label
+                }
+              }
+            // return this.section?this.navigation[this.section].label:''
+          }
     },
 
     methods: {
@@ -93,7 +109,7 @@ export const ebookMixin = {
                 saveLocation(this.fileName, startCfi)
                 //每次翻页判断是否为书签页
                 const bookmark=getBookmark(this.fileName)
-                console.log(bookmark)
+                // console.log(bookmark)
                 if(bookmark){
                     if(bookmark.some(item=>item.cfi===startCfi)){
                         this.setIsBookmark(true)
@@ -128,6 +144,12 @@ export const ebookMixin = {
                 })
             }
         },
+        displayProgress() {
+            let cfi = this.currentBook.locations.cfiFromPercentage(
+              this.progress / 100
+            );
+            this.display(cfi)
+          },
         //获取已读时间
         getReadTimeText() {
             return this.$t('book.haveRead').replace('$1',getReadTimeByMinute(this.fileName))
