@@ -1,7 +1,7 @@
 <template>
  <div class="store-home">
      <search-bar></search-bar>
-     <flap-card></flap-card>
+     <flap-card :data='random'></flap-card>
      <scroll :top='scrollTop' @onScroll='onScroll' ref="scroll">
          <div>11111111111111111</div>
          <div>11111111111111111</div>
@@ -36,11 +36,13 @@ import SearchBar from '../../components/home/SearchBar'
 import FlapCard from '../../components/home/FlapCart'
 import Scroll from '../../components/Scroll'
 import {storeHomeMixin} from '../../utils/mixin'
+import {home} from '../../api/store'
 export default {
 mixins:[storeHomeMixin],
  data() {
   return {
-      scrollTop:94
+      scrollTop:94,
+      random:null
   }
  },
  methods: {
@@ -58,7 +60,20 @@ mixins:[storeHomeMixin],
      SearchBar,
      Scroll,
      FlapCard
- }
+ },
+ mounted() {
+     home().then((res)=>{
+         if(res&&res.status===200){
+             const data=res.data
+             //获取随机一本书
+             const randomIndex= Math.floor(Math.random()*data.random.length)
+             
+             //保存获取到的书
+             this.random=data.random[randomIndex]
+             console.log(this.random)
+         }
+     })
+ },
 }
 </script>
 
