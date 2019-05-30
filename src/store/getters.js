@@ -1,8 +1,8 @@
-const book ={
-    fileName:state=>state.book.fileName,
-    menuShow:state=>state.book.menuShow,
-    settingShow:state=>state.book.settingShow,
-    defaultFontSize:state=>state.book.defaultFontSize,
+const book = {
+    fileName: state => state.book.fileName,
+    menuShow: state => state.book.menuShow,
+    settingShow: state => state.book.settingShow,
+    defaultFontSize: state => state.book.defaultFontSize,
     defaultFontFamily: state => state.book.defaultFontFamily,
     fontFamilyVisible: state => state.book.fontFamilyVisible,
     defaultTheme: state => state.book.defaultTheme,
@@ -18,5 +18,13 @@ const book ={
     pagelist: state => state.book.pagelist,
     offsetY: state => state.book.offsetY,
     isBookmark: state => state.book.isBookmark,
+    hotSearchOffsetY: state => state.store.hotSearchOffsetY,
+    flapCardVisible: state => state.store.flapCardVisible,
+    isEditMode: state => state.store.isEditMode,
+    shelfList: state => state.store.shelfList,
+    shelfSelected: state => state.store.shelfSelected,
+    shelfTitleVisible: state => state.store.shelfTitleVisible,
+    shelfCategory: state => state.store.shelfCategory,
+    currentType: state => state.store.currentType
 }
 export default book

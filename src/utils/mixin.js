@@ -10,6 +10,22 @@ import {
 import {
     saveLocation, getBookmark
 } from './localStorage'
+
+export const storeHomeMixin={
+    computed: {
+        ...mapGetters([
+            'offsetY',
+            'hotSearchOffsetY'
+        ])
+    },
+    methods: {
+        ...mapActions([
+            'setOffsetY',
+            'setHotSearchOffsetY'
+        ])
+    },
+}
+
 export const ebookMixin = {
     computed: {
         ...mapGetters([

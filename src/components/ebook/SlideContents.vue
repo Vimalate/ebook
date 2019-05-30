@@ -43,7 +43,7 @@
         :class="{'selected':section===index}"
         :style="contentItem(item)"
         >{{item.label}}</span>
-        <span class="slide-contents-page"></span>
+        <span class="slide-contents-page">{{item.page}}</span>
       </div>
     </scroll>
     <scroll class="slide-search-list" 
@@ -243,7 +243,11 @@ export default {
         @include ellipsis;
        
       }
-      .slide-contents-page{}
+      .slide-contents-page{
+        flex: 0 0 px2rem(30);
+        font-size: px2rem(10);
+        @include right;
+      }
     }
   }
   .slide-search-list{

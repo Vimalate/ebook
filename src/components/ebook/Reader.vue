@@ -234,7 +234,7 @@ export default {
               currentPage += nav.pagelist.length + 1
             })
           })
-          console.log(locations,this.navigation)
+          // console.log(locations,this.navigation)
           this.setBookAvailable(true);
           this.refreshLocation();
         });
