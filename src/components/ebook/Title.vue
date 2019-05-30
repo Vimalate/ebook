@@ -29,7 +29,9 @@ export default {
   },
   mixins: [ebookMixin],
   methods: {
-    back() {},
+    back() {
+      this.$router.go(-1)
+    },
     gotoBookStore() {}
   },
   components: {}

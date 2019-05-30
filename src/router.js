@@ -1,33 +1,39 @@
 import Vue from 'vue'
 import Router from 'vue-router'
- 
+
 Vue.use(Router)
 export default new Router({
-    routes:[ 
-        {
+    routes: [{
             path: '/',
-            redirect:'/store'
+            redirect: '/store'
         },
         {
             path: '/ebook',
-            component:()=>import('./views/ebook/index.vue'),
-            children:[
-                {
-                    path: ':fileName',
-                    component:()=>import('./components/ebook/Reader.vue')
-                },
-            ]
+            component: () => import('./views/ebook/index.vue'),
+            children: [{
+                path: ':fileName',
+                component: () => import('./components/ebook/Reader.vue')
+            }, ]
         },
         {
-            path:'/store',
-            component:()=>import('./views/store/index.vue'),
-            redirect:'/store/home',
-            children:[
+            path: '/store',
+            component: () => import('./views/store/index.vue'),
+            redirect: '/store/home',
+            children: [
                 {
                     path: 'home',
-                    component:()=>import('./views/store/StoreHome.vue')
+                    component: () => import('./views/store/StoreHome.vue')
                 },
+                {
+                    path: 'list',
+                    component: () => import('./views/store/StoreList.vue')
+                },
+                {
+                    path: 'detail',
+                    component: () => import('./views/store/StoreDetail.vue')
+                }
             ]
-        }
+        },
+
     ]
 })

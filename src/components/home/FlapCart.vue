@@ -362,7 +362,7 @@
     .close-btn-wrapper {
       position: absolute;
       left: 0;
-      bottom: px2rem(30);
+      bottom: px2rem(60);
       z-index: 1100;
       width: 100%;
       @include center;
