@@ -7,7 +7,7 @@
           <span class="title-text title">{{$t('home.title')}}</span>
         </div>
         <div class="search-icon-shake-wrapper">
-          <span class="icon-shake icon"></span>
+          <span class="icon-shake icon" @click="showFlapCard"></span>
         </div>
       </div>
     </transition>
@@ -67,6 +67,9 @@ export default {
     // showHotSearch() {
     //   this.hotSearchVisible=!this.hotSearchVisible
     // },
+    showFlapCard() {
+        this.setFlapCardVisible(true)
+      },
     back() {
       if(this.offsetY>0){
         this.showShadow()
