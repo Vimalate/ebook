@@ -132,7 +132,7 @@ export default {
         // method: "default"
       });
       const location = getLocation(this.fileName);
-      console.log(location)
+      // console.log(location)
       this.display(location, () => {
 
         this.initFontFamily();
@@ -196,7 +196,7 @@ export default {
     initEpub() {
       const baseUrl =
         process.env.VUE_APP_RES_URL + "/epub/" + this.fileName + ".epub";
-      console.log(baseUrl);
+      // console.log(baseUrl);
       this.book = new Epub(baseUrl);
       this.setCurrentBook(this.book);
       this.initRendition();
