@@ -222,6 +222,7 @@
           }).then(response => {
             if (response.status === 200 && response.data.error_code === 0 && response.data.data) {
               const data = response.data.data
+              console.log(data)
               this.bookItem = data
               this.cover = this.bookItem.cover
               let rootFile = data.rootFile
@@ -271,7 +272,7 @@
 
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../assets/styles/global";
-
+  
   .book-detail {
     width: 100%;
     background: white;

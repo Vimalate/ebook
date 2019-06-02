@@ -20,7 +20,8 @@
         <span class="icon-search icon"></span>
         <input type="text" class="input" 
         :placeholder="$t('home.hint')" 
-        v-model="searchText" @click="showHotSearch">
+        v-model="searchText" @click="showHotSearch"
+        @keyup.13.exact='search'>
       </div>
     </div>
   </div>
@@ -67,6 +68,14 @@ export default {
     // showHotSearch() {
     //   this.hotSearchVisible=!this.hotSearchVisible
     // },
+    search() {
+        this.$router.push({
+          path:'/store/list',
+          query:{
+            keyword:this.searchText
+          }
+        })
+    },
     showFlapCard() {
         this.setFlapCardVisible(true)
       },
@@ -76,7 +85,11 @@ export default {
       }else{
         this.hideShadow()
       }
-      this.hideHotSearch()
+      if(this.hotSearchVisible){
+        this.hideHotSearch()
+      }else{
+        this.$router.push('/store/shelf')
+      }
      
     },
     hideHotSearch() {

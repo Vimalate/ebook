@@ -194,10 +194,10 @@ export default {
       });
     },
     initEpub() {
-      const baseUrl =
-        process.env.VUE_APP_RES_URL + "/epub/" + this.fileName + ".epub";
+      const baseUrl =process.env.VUE_APP_RES_URL + "/epub/" + this.fileName + ".epub";
       // console.log(baseUrl);
       this.book = new Epub(baseUrl);
+      // this.book = new Epub(url);
       this.setCurrentBook(this.book);
       this.initRendition();
       this.initGesture();
@@ -214,10 +214,11 @@ export default {
           })
            locations.forEach(item => {
             const loc = item.match(/\[(.*)\]!/)[1]
-            console.log(loc)
+            // console.log(loc)
             this.navigation.forEach(nav => {
               if (nav.href) {
-                const href ='A'+ nav.href.match(/^html\/(.*)\.xhtml$/)[1]
+                // const href ='A'+ nav.href.match(/^html\/(.*)\.xhtml$/)[1]
+                  const href = nav.href.match(/^(.*)\.html$/)
                 // console.log(href)
                 if (href) {
                   if (href=== loc) {

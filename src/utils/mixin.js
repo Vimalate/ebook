@@ -8,7 +8,7 @@ import {
     removeAllCss,getReadTimeByMinute
 } from './book.js'
 import {
-    saveLocation, getBookmark
+    saveLocation, getBookmark,getBookShelf,saveBookShelf
 } from './localStorage'
 
 export const storeHomeMixin={
@@ -184,4 +184,39 @@ export const ebookMixin = {
         },
     },
 
+}
+
+export const storeShelfMixin={
+    computed:{
+        ...mapGetters([
+            'isEditMode',
+            'shelfList',
+            'shelfSelected',
+            'shelfTitleVisible',
+            'offsetY'
+        ])
+    },
+    methods:{
+        ...mapActions([
+            'setIsEditMode',
+            'setShelfList',
+            'setShelfSelected',
+            'setShelfTitleVisible',
+            'setOffsetY'
+        ]),
+        // getShelfList() {
+        //     let shelfList = getBookShelf()
+        //     if (!shelfList) {
+        //       shelf().then(response => {
+        //         if (response.status === 200 && response.data && response.data.bookList) {
+        //           shelfList = appendAddToShelf(response.data.bookList)
+        //           saveBookShelf(shelfList)
+        //           return this.setShelfList(shelfList)
+        //         }
+        //       })
+        //     } else {
+        //       return this.setShelfList(shelfList)
+        //     }
+        //   },
+    }
 }
