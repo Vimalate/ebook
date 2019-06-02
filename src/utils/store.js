@@ -74,7 +74,7 @@ export function gotoBookDetail(vue, book) {
   })
 }
 
-export function gotoStoreHome(vue) {
+export function gotoStoreHome(vue) {//传递vue实例
   vue.$router.push({
     path: '/store/home'
   })

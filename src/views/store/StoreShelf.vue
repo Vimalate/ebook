@@ -1,10 +1,12 @@
 <template>
   <div class="store-shelf">
     <shelf-title></shelf-title>
-    <scroll class="store-shelf-scroll-wrapper" :top='0' @onScroll='onScroll' >
+    <scroll class="store-shelf-scroll-wrapper" :top='0' 
+    :bottom='scrollBottom' @onScroll='onScroll' ref="scroll" >
       <shelf-search></shelf-search>
       <shelf-list></shelf-list>
     </scroll>
+    <shelf-footer></shelf-footer>
   </div>
 </template>
 
@@ -16,13 +18,23 @@ import ShelfSearch from '../../components/shelf/ShelfSearch'
 import ShelfTitle from '../../components/shelf/ShelfTitle'
 import ShelfList from '../../components/shelf/ShelfList'
 import {shelf} from '.././../api/store'
+import {appendAddToShelf} from '../../utils/store'
+import ShelfFooter from '../../components/shelf/ShelfFooter'
 export default {
   data () {
     return {
+      scrollBottom:0
     };
   },
+ 
   watch: {
-    
+    isEditMode(isEditMode){
+      this.scrollBottom=isEditMode?48:0
+      this.$nextTick(()=>{
+        this.$refs.scroll.refresh()
+      })
+      
+    }
   },
   mounted() {
     this.getShelfList()
@@ -36,7 +48,7 @@ export default {
         console.log(res)
         if(res.status===200&&res.data&&res.data.bookList){
           console.log(res.data.bookList)
-          this.setShelfList(res.data.bookList)
+          this.setShelfList(appendAddToShelf(res.data.bookList))
         }
       })
     }
@@ -46,7 +58,8 @@ export default {
     ShelfTitle,
     Scroll,
     ShelfSearch,
-    ShelfList
+    ShelfList,
+    ShelfFooter
   }
 
 }
