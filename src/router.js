@@ -39,6 +39,10 @@ export default new Router({
                 {
                     path:'shelf',
                     component:()=>import('./views/store/StoreShelf.vue')
+                },
+                {
+                    path:'speaking',
+                    component:()=>import('./views/store/StoreSpeaking.vue')
                 }
             ]
         }
