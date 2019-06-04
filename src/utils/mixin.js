@@ -8,9 +8,10 @@ import {
     removeAllCss,getReadTimeByMinute
 } from './book.js'
 import {
-    saveLocation, getBookmark,getBookShelf,saveBookShelf
+    saveLocation, getBookmark,getBookShelf, saveBookShelf
 } from './localStorage'
-import {gotoBookDetail} from '../utils/store'
+import {gotoBookDetail,appendAddToShelf} from '../utils/store'
+import {shelf} from '../api/store'
 export const storeHomeMixin={
     computed: {
         ...mapGetters([
@@ -187,7 +188,9 @@ export const storeShelfMixin={
             'shelfList',
             'shelfSelected',
             'shelfTitleVisible',
-            'offsetY'
+            'offsetY',
+            'shelfCategory',
+            'currentType'
         ])
     },
     methods:{
@@ -196,11 +199,37 @@ export const storeShelfMixin={
             'setShelfList',
             'setShelfSelected',
             'setShelfTitleVisible',
-            'setOffsetY'
+            'setOffsetY',
+            'setShelfCategory',
+            'setCurrentType'
         ]),
         showBookDetail(book){
             gotoBookDetail(this,book)
             console.log('showBookDetail')
+        },
+        getShelfList() {
+            let shelfList=getBookShelf()
+            if(!shelfList){
+              shelf().then(res=>{
+              console.log(res)
+              if(res.status===200&&res.data&&res.data.bookList){
+                // console.log(res.data.bookList)
+                shelfList=appendAddToShelf(res.data.bookList)
+                saveBookShelf(shelfList)
+                return this.setShelfList(shelfList)
+              }
+            })
+            }else{
+             return this.setShelfList(shelfList)
+            }
+            
+          },
+        getCategoryList(title) {
+            this.getShelfList().then(()=>{
+                const categoryList=this.shelfList.filter(book=>
+                    book.type===2&&book.title===title)[0]
+                    this.setShelfCategory(categoryList)
+            })
         }
         // getShelfList() {
         //     let shelfList = getBookShelf()

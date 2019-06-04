@@ -1,10 +1,10 @@
 <template>
   <div class="store-shelf">
-    <shelf-title></shelf-title>
+    <shelf-title :title="$t('shelf.title')"></shelf-title>
     <scroll class="store-shelf-scroll-wrapper" :top='0' 
     :bottom='scrollBottom' @onScroll='onScroll' ref="scroll" >
       <shelf-search></shelf-search>
-      <shelf-list></shelf-list>
+      <shelf-list :data='shelfList'></shelf-list>
     </scroll>
     <shelf-footer></shelf-footer>
   </div>
@@ -17,9 +17,9 @@ import Scroll from '../../components/Scroll'
 import ShelfSearch from '../../components/shelf/ShelfSearch'
 import ShelfTitle from '../../components/shelf/ShelfTitle'
 import ShelfList from '../../components/shelf/ShelfList'
-import {shelf} from '.././../api/store'
-import {appendAddToShelf} from '../../utils/store'
+// import {appendAddToShelf} from '../../utils/store'
 import ShelfFooter from '../../components/shelf/ShelfFooter'
+// import {getBookShelf, saveBookShelf} from '../../utils/localStorage'
 export default {
   data () {
     return {
@@ -38,20 +38,14 @@ export default {
   },
   mounted() {
     this.getShelfList()
+    this.setShelfCategory([])
+    this.setCurrentType(1)
   },
   methods: {
     onScroll(offsetY) {
       this.setOffsetY(offsetY)
     },
-    getShelfList() {
-      shelf().then(res=>{
-        console.log(res)
-        if(res.status===200&&res.data&&res.data.bookList){
-          console.log(res.data.bookList)
-          this.setShelfList(appendAddToShelf(res.data.bookList))
-        }
-      })
-    }
+   
   },
   mixins: [storeShelfMixin],
   components:{

@@ -25,6 +25,10 @@ export default new Router({
                     component: () => import('./views/store/StoreHome.vue')
                 },
                 {
+                    path: 'category',
+                    component: () => import('./views/store/StoreCategory.vue')
+                },
+                {
                     path: 'list',
                     component: () => import('./views/store/StoreList.vue')
                 },

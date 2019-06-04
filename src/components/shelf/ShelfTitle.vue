@@ -2,14 +2,18 @@
   <transition name="fade">
     <div class="shelf-title" :class="{'hide-shadow':ifHideShadow}" v-show="shelfTitleVisible">
       <div class="shelf-title-text-wrapper">
-        <span class="shelf-title-text">{{$t('shelf.title')}}</span>
+        <span class="shelf-title-text">{{title}}</span>
         <span class="shelf-title-sub-text" v-show="isEditMode">{{selectedText}}</span>
       </div>
-      <div class="shelf-title-btn-wrapper shelf-title-left" @click="clearCache">
+      <div class="shelf-title-btn-wrapper shelf-title-left"  v-if="!ifShowBack" @click="clearCache">
         <span class="shelf-title-btn-text">{{$t('shelf.clearCache')}}</span>
       </div>
-      <div class="shelf-title-btn-wrapper shelf-title-right" @click="onEditClick">
+      <div class="shelf-title-btn-wrapper shelf-title-right"
+       @click="onEditClick">
         <span class="shelf-title-btn-text">{{isEditMode?$t('shelf.cancel'):$t('shelf.edit')}}</span>
+      </div>
+      <div class="shelf-title-btn-wrapper shelf-title-left" v-if="ifShowBack" @click="clearCache">
+        <span class="icon-back" @click="back"></span>
       </div>
     </div>
   </transition>
@@ -17,11 +21,20 @@
 
 <script>
 import { storeShelfMixin } from "../../utils/mixin";
+import { clearLocalStorage } from "../../utils/localStorage";
+import { clearLocalForage } from "../../utils/loacaforage";
 export default {
   data() {
     return {
-      ifHideShadow:true
+      ifHideShadow: true
     };
+  },
+  props:{
+    title:String,
+    ifShowBack:{
+      type:Boolean,
+      default:false
+    }
   },
   mixins: [storeShelfMixin],
   computed: {
@@ -36,24 +49,39 @@ export default {
   },
   watch: {
     offsetY(offsetY) {
-      if(offsetY>0){
-        this.ifHideShadow=false
-      }else{
-        this.ifHideShadow=true
+      if (offsetY > 0) {
+        this.ifHideShadow = false;
+      } else {
+        this.ifHideShadow = true;
       }
     }
   },
   methods: {
+    back() {
+      this.$router.go(-1);
+    },
     onEditClick() {
-      if(!this.isEditMode){
-        this.setShelfSelected([])
-        this.shelfList.forEach(item => {item.selected=false});
+      if (!this.isEditMode) {
+        this.setShelfSelected([]);
+        this.shelfList.forEach(item => {
+          item.selected = false;
+          if (item.itemList) {
+            item.itemList.forEach(subItem => {
+              subItem.selected = false;
+            });
+          }
+        });
       }
       return this.setIsEditMode(!this.isEditMode);
-      
     },
     clearCache() {
       console.log("clearCache");
+      clearLocalStorage();
+      clearLocalForage();
+      this.setShelfList([]);
+      this.setShelfSelected([]);
+      this.getShelfList();
+      this.simpleToast(this.$t("shelf.clearCacheSuccess"));
     }
   }
 };
