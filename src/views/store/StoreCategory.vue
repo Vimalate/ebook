@@ -36,7 +36,9 @@ export default {
     isEditMode(isEditMode) {
       this.scrollBottom = isEditMode ? 48 : 0;
       this.$nextTick(() => {
+        if(this.$refs.scroll){
         this.$refs.scroll.refresh();
+        }
       });
     }
   },

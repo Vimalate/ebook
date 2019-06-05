@@ -268,7 +268,7 @@
           this.section = this.book.spine.get(this.chapter.href)
           this.rendition.display(this.section.href).then(section => {
             const currentPage = this.rendition.currentLocation()
-            console.log(this.rendition)
+            console.log(this.rendition,section)
             const cfibase = section.cfiBase
             const cfistart = currentPage.start.cfi.replace(/.*!/, '').replace(/\)/, '')
             const cfiend = currentPage.end.cfi.replace(/.*!/, '').replace(/\)/, '')

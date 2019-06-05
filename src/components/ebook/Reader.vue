@@ -36,7 +36,7 @@ export default {
         })
       }else{
         this.setFileName(books.join('/')).then(() => {
-        const url =process.env.VUE_APP_RES_URL + "/epub/" + this.fileName + ".epub";
+        const url =process.env.VUE_APP_EPUB_URL + '/' + this.fileName + ".epub";
         this.initEpub(url);
     });
       }
@@ -57,7 +57,7 @@ export default {
       e.preventDefault()
       e.stopPropagation()
     },
-    moveEnd(e){
+    moveEnd(){
       this.setOffsetY(0)
       this.firstOffsetY=0
       // console.log('end')

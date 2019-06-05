@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import { Stats, truncate } from "fs";
 export default {
   name: "popup",
   data() {

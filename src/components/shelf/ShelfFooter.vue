@@ -102,24 +102,22 @@ export default {
       }
     },
     downloadBook(book) {
-      let text=''
-      const toast=this.toast({
-        text,
-      })
-      toast.continueShow()
-      return new Promise((resolve,reject)=>{
-        download(book,book=>{
-          console.log('下载完毕')
-          //前面传入的text值不能更新，直接移除toast api
-          toast.remove()
-          resolve(book)
-        },reject,progressEvent=>{
-          const progress=Math.floor(progressEvent.load/progressEvent.total*100)+'%'
-          text=this.$t('shelf.progressDownload').replace('$1',`${book.fileName}.epub(${progress})`)
-          toast.updateText(text)
+        let text = ''
+        const toast = this.toast({
+          text
         })
-      })
-    },
+        toast.continueShow()
+        return new Promise((resolve, reject) => {
+          download(book, book => {
+            toast.remove()
+            resolve(book)
+          }, reject, progressEvent => {
+            const progress = Math.floor(progressEvent.loaded / progressEvent.total * 100) + '%'
+            text = this.$t('shelf.progressDownload').replace('$1', `${book.fileName}.epub(${progress})`)
+            toast.updateText(text)
+          })
+        })
+      },
     removeSelectedBook() {
       Promise.all(this.shelfSelected.map(book=>this.removeBook(book)))
       .then(books=>{
