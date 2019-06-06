@@ -23,7 +23,7 @@
           <div class="content-author sub-title-medium">{{data ? data.author : ''}}</div>
           <div class="content-category">{{categoryText()}}</div>
         </div>
-        <div class="read-btn" @click.stop="showBookDetail(data)">{{$t('home.readNow')}}</div>
+        <div class="read-btn" @click.stop="showBookDetailAndClose(data)" >{{$t('home.readNow')}}</div>
       </div>
     </div>
     <div class="close-btn-wrapper" @click="close">
@@ -61,6 +61,10 @@
       }
     },
     methods: {
+      showBookDetailAndClose(data) {
+        this.showBookDetail(data)
+        this.close()
+      },
       close() {
         this.stopAnimation()
         this.setFlapCardVisible(false)
