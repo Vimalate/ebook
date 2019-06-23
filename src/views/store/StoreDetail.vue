@@ -265,7 +265,7 @@ export default {
             response.data.data
           ) {
             const data = response.data.data;
-            console.log(data);
+            // console.log(data);
             this.bookItem = data;
             this.cover = this.bookItem.cover;
             let rootFile = data.rootFile;
@@ -361,8 +361,8 @@ export default {
             color: #333;
           }
         }
-        #preview {
-        }
+        // #preview {
+        // }
         .book-detail-content-item-wrapper {
           .book-detail-content-item {
             padding: px2rem(15) 0;

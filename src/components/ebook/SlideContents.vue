@@ -157,7 +157,7 @@ export default {
       padding: 0 px2rem(10);
       box-sizing: border-box;
       flex: 1;
-      // width: px2rem(150);
+      width: px2rem(150);
       .book-title {
         font-size: px2rem(14);
         line-height: px2rem(16);

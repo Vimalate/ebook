@@ -146,11 +146,7 @@ export default {
       console.log('ok')
       this.simpleToast(this.$t("shelf.setDownloadSuccess"));
       }
-      // if (isDownload) {
-      //   this.simpleToast(this.$t("shelf.setDownloadSuccess"));
-      // } else {
-      //   this.simpleToast(this.$t("shelf.removeDownloadSuccess"));
-      // }
+      
     },
     hidePopup() {
       this.popupMenu.hide();

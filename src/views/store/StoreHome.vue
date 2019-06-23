@@ -73,7 +73,7 @@ export default {
       if (res && res.status === 200) {
         const data = res.data;
         //获取随机一本书
-        console.log(data);
+        // console.log(data);
         const randomIndex = Math.floor(Math.random() * data.random.length);
 
         //保存获取到的书
@@ -84,7 +84,6 @@ export default {
         this.featured = data.featured;
         this.categoryList = data.categoryList;
         this.categories = data.categories;
-        console.log(this.random);
       }
     });
   }

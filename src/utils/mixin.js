@@ -28,7 +28,7 @@ export const storeHomeMixin={
         ]),
         showBookDetail(book){
             gotoBookDetail(this,book)
-            console.log('showBookDetail')
+            // console.log('showBookDetail')
         }
     },
 }

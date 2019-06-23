@@ -141,7 +141,7 @@ export default {
       this.rendition = this.book.renderTo("read", {
         width: innerWidth,
         height: innerHeight,
-        // method: "default"
+        method: "default"
       });
       const location = getLocation(this.fileName);
       // console.log(location)
