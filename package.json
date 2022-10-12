@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
-    "epubjs": "^0.3.84",
+    "epubjs": "^0.3.93",
     "express": "^4.17.1",
     "localforage": "^1.7.3",
     "vue": "^2.6.10",
