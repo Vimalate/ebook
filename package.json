@@ -11,7 +11,7 @@
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
     "epubjs": "^0.3.84",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "localforage": "^1.7.3",
     "vue": "^2.6.10",
     "vue-create-api": "^0.2.1",
